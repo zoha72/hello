@@ -150,12 +150,12 @@
 					<input id="situation" type="text" placeholder="e.g. I cannot stop thinking about them" autocomplete="off">
 					<button class="find-button" id="find" type="button">Answer me</button>
 				</div>
-				<p class="hint">Try “the group chat is silent”, “I need courage”, or “everything is a mess”</p>
+				<p class="hint">Try “I’m grieving a goodbye”, “I want to succeed”, or “the world feels magical”</p>
 			</section>
 
 			<section class="quote-wrap" aria-live="polite" aria-label="Your Shakespeare quote">
 				<div class="quote-card" id="quote-card">
-					<div class="quote-number" id="quote-number">Quote 01 / 500</div>
+					<div class="quote-number" id="quote-number">Quote 01 / 630</div>
 					<blockquote id="quote">All the world's a stage, and all the men and women merely players.</blockquote>
 					<div class="attribution" id="attribution">As You Like It, Act II, Scene VII</div>
 					<p class="explanation" id="explanation">This utterance doth construe the world as a stage, wherein every soul is but an actor bound unto a part allotted by fortune.</p>
@@ -275,34 +275,93 @@
 			{ mood: 'chaos', text: 'A plague o’ both your houses!', source: 'Romeo and Juliet, Act III, Scene I' },
 			{ mood: 'chaos', text: 'There’s daggers in men’s smiles.', source: 'Macbeth, Act II, Scene III' }
 		];
-		let allQuotes = [...quotes];
+		const playQuotes = [
+			{ mood: 'wisdom', text: 'The rest is silence.', source: 'Hamlet, Act V, Scene II' },
+			{ mood: 'courage', text: 'Lay on, Macduff, and damned be him that first cries, Hold, enough!', source: 'Macbeth, Act V, Scene VIII' },
+			{ mood: 'love', text: 'Parting is such sweet sorrow.', source: 'Romeo and Juliet, Act II, Scene II' },
+			{ mood: 'chaos', text: 'The night is darkening round me, the wild winds coldly blow.', source: 'King Lear, Act III, Scene II' },
+			{ mood: 'wisdom', text: 'Our doubts are traitors.', source: 'Measure for Measure, Act I, Scene IV' },
+			{ mood: 'courage', text: 'I am constant as the northern star.', source: 'Julius Caesar, Act III, Scene I' },
+			{ mood: 'love', text: 'The exchange of thy love’s faithful vow for mine.', source: 'Romeo and Juliet, Act II, Scene II' },
+			{ mood: 'chaos', text: 'Something is rotten in the state of Denmark.', source: 'Hamlet, Act I, Scene IV' },
+			{ mood: 'wisdom', text: 'The evil that men do lives after them; the good is oft interred with their bones.', source: 'Julius Caesar, Act III, Scene II' },
+			{ mood: 'courage', text: 'I will wear my heart upon my sleeve for daws to peck at.', source: 'Othello, Act I, Scene I' },
+			{ mood: 'love', text: 'When I said I would die a bachelor, I did not think I should live till I were married.', source: 'Much Ado About Nothing, Act II, Scene III' },
+			{ mood: 'chaos', text: 'Out of this nettle, danger, we pluck this flower, safety.', source: 'Henry IV, Part 1, Act II, Scene III' },
+			{ mood: 'wisdom', text: 'The time of life is short; to spend that shortness basely were too long.', source: 'Henry IV, Part 1, Act V, Scene II' },
+			{ mood: 'courage', text: 'I shall do so; and in the bitterest terms.', source: 'King Lear, Act II, Scene IV' },
+			{ mood: 'love', text: 'I have drunk, and seen the spider.', source: 'The Winter’s Tale, Act II, Scene I' },
+			{ mood: 'chaos', text: 'The instruments of darkness tell us truths.', source: 'Macbeth, Act I, Scene III' },
+			{ mood: 'wisdom', text: 'He that is giddy thinks the world turns round.', source: 'The Taming of the Shrew, Act V, Scene II' },
+			{ mood: 'courage', text: 'I am a soldier, and my name is George.', source: 'Henry V, Act IV, Scene IV' },
+			{ mood: 'love', text: 'If thou remember’st not the slightest folly that ever love did make thee run into, thou hast not loved.', source: 'As You Like It, Act II, Scene IV' },
+			{ mood: 'chaos', text: 'The fiend is rough, and will not be roughly used.', source: 'King Lear, Act III, Scene IV' },
+			{ mood: 'insult', text: 'Thou art a boil, a plague-sore, an embossed carbuncle in my corrupted blood.', source: 'King Lear, Act II, Scene IV' },
+			{ mood: 'insult', text: 'Thou cream-faced loon!', source: 'Macbeth, Act V, Scene III' },
+			{ mood: 'insult', text: 'You are a saucy fellow.', source: 'The Merry Wives of Windsor, Act I, Scene I' },
+			{ mood: 'insult', text: 'Thou art as fat as butter.', source: 'Henry IV, Part 1, Act II, Scene IV' },
+			{ mood: 'insult', text: 'Away, you three-inch fool!', source: 'The Taming of the Shrew, Act IV, Scene I' },
+			{ mood: 'insult', text: 'Thou art the king of honour: no man so potent breathes upon the ground.', source: 'Troilus and Cressida, Act II, Scene III' },
+			{ mood: 'insult', text: 'Thou art a flesh-monger, a fool and a coward.', source: 'Twelfth Night, Act III, Scene I' },
+			{ mood: 'insult', text: 'I do desire we may be better strangers.', source: 'As You Like It, Act III, Scene II' },
+			{ mood: 'insult', text: 'He has no more brain than a stone.', source: 'Henry IV, Part 1, Act III, Scene III' },
+			{ mood: 'insult', text: 'You are not worth another word, else I’d call you knave.', source: 'Much Ado About Nothing, Act I, Scene I' }
+		];
+		let allQuotes = [...quotes, ...playQuotes];
 		const oracleLines = ['You are exactly where the plot needs you.', 'The next scene will be stranger, but better.', 'A little theatricality will serve you well.', 'Exit pursued by a feeling of relief.'];
 		const promptSignals = {
+			insult: ['insult', 'insulting', 'roast', 'burn', 'comeback', 'taunt', 'mock', 'mockery', 'rude', 'barb', 'put down', 'stupid question', 'dumb question', 'silly question', 'obvious question', 'foolish', 'idiot', 'nonsense'],
+			jealousy: ['jealous', 'jealousy', 'envy', 'envious', 'possessive', 'rival', 'insecure', 'threatened'],
+			boredom: ['bored', 'boredom', 'dull', 'nothing to do', 'restless', 'tedious', 'routine', 'stuck', 'uninteresting'],
+			grief: ['grief', 'grieving', 'loss', 'lost', 'mourning', 'mourn', 'goodbye', 'farewell', 'hurt', 'heartbroken'],
+			ambition: ['success', 'succeed', 'goal', 'career', 'promotion', 'power', 'ambition', 'achieve', 'victory', 'win'],
+			friendship: ['friend', 'friendship', 'team', 'together', 'loyal', 'betrayal', 'betrayed', 'trust'],
+			wonder: ['wonder', 'dream', 'magic', 'stars', 'beautiful', 'nature', 'inspired', 'imagine', 'mystery'],
+			solitude: ['alone', 'lonely', 'solitude', 'quiet', 'rest', 'peace', 'private', 'unseen'],
+			mischief: ['mischief', 'prank', 'joke', 'funny', 'silly', 'tease', 'trick', 'naughty'],
 			love: ['love', 'crush', 'date', 'romance', 'heart', 'miss', 'kiss', 'beautiful', 'attracted', 'feelings', 'them'],
 			courage: ['brave', 'courage', 'afraid', 'fear', 'nervous', 'difficult', 'challenge', 'try', 'start', 'risk', 'decision', 'confidence', 'quit', 'leave'],
 			chaos: ['mess', 'chaos', 'drama', 'angry', 'jealous', 'awkward', 'party', 'gossip', 'problem', 'disaster', 'weird', 'confused', 'fight', 'group chat', 'late'],
 			wisdom: ['why', 'meaning', 'advice', 'think', 'learn', 'truth', 'choice', 'past', 'future', 'work', 'life', 'alone', 'sad', 'should']
 		};
+		const moodFallbacks = { insult: 'chaos', jealousy: 'chaos', boredom: 'wisdom', grief: 'wisdom', ambition: 'courage', friendship: 'love', wonder: 'wisdom', solitude: 'wisdom', mischief: 'chaos' };
 		let currentIndex = 0;
 		const quote = document.querySelector('#quote');
 		const source = document.querySelector('#attribution');
 		const explanation = document.querySelector('#explanation');
 		const card = document.querySelector('#quote-card');
 		const explanationStyles = {
+			insult: 'This utterance deployeth wit as a sharpened instrument, whereby a foe is diminished with more ceremony than mercy.',
+			jealousy: 'This utterance doth expose the green-eyed infirmity, wherein affection turneth watchful and the heart maketh a rival of every shadow.',
+			boredom: 'The line doth contemplate that leaden vacancy wherein time crawleth upon its knees and even novelty seemeth dressed in ordinary raiment.',
+			grief: 'This utterance doth give tongue unto sorrow, whereby loss is not banished but borne as a solemn companion through the darkened hours.',
+			ambition: 'The speaker doth apprehend desire as a ladder, each rung demanding audacity, labour, and a heart unwilling to remain obscure.',
+			friendship: 'Herein is fellowship weighed as a covenant of mutual trust, whose breach or keeping revealeth the true measure of a soul.',
+			wonder: 'This saying openeth a window upon marvel, bidding the mind behold the world as stranger, grander, and more enchanted than common habit alloweth.',
+			solitude: 'The line inhabiteth that private province where the soul conferreth with itself, finding either sanctuary or an echoing chamber therein.',
+			mischief: 'This counsel doth wink at merry disorder, wherein wit and impertinence conspire to make solemn custom briefly lose its dignity.',
 			love: 'The speaker doth render affection as a sovereign power, whereby the heart is made subject unto longing, beauty, and tender folly.',
 			courage: 'This saying exhorteth the hearer to withstand fear and hazard, for honour is oft discovered where the spirit refuseth to retreat.',
 			chaos: 'Herein is mortal disorder unveiled: sense contendeth with passion, and the world proceedeth according to no gentlemanly design.',
 			wisdom: 'The line offereth a grave sententia, bidding the hearer discern what hidden truth may be gleaned beneath the common masque of things.'
 		};
 
-		function explainQuote(item) {
-			return `${explanationStyles[item.mood]} In ${item.source}, such counsel is uttered as though the very heavens had appointed the matter.\u00a0`;
+		function strongestMood(text) {
+			const scores = Object.entries(promptSignals).map(([mood, signals]) => ({
+				mood,
+				score: signals.reduce((total, signal) => total + (text.includes(signal) ? 1 : 0), 0)
+			}));
+			return scores.sort((left, right) => right.score - left.score)[0];
 		}
 
-		function showQuote(item, index) {
+		function explainQuote(item, mood = item.mood) {
+			return `${explanationStyles[mood] || explanationStyles[item.mood]} In ${item.source}, such counsel is uttered as though the very heavens had appointed the matter.\u00a0`;
+		}
+
+		function showQuote(item, index, mood = item.mood) {
 			quote.textContent = item.text;
 			source.textContent = item.source;
-			explanation.textContent = explainQuote(item);
+			explanation.textContent = explainQuote(item, mood);
 			document.querySelector('#quote-number').textContent = `Quote ${String(index + 1).padStart(2, '0')} / ${allQuotes.length}`;
 			card.classList.remove('page-turn');
 			void card.offsetWidth;
@@ -311,16 +370,15 @@
 		async function chooseQuote() {
 			await archiveReady;
 			const query = document.querySelector('#situation').value.toLowerCase().trim();
-			const scores = Object.entries(promptSignals).map(([mood, signals]) => ({
-				mood,
-				score: signals.reduce((total, signal) => total + (query.includes(signal) ? 1 : 0), 0)
-			}));
-			const strongest = scores.sort((left, right) => right.score - left.score)[0];
-			const pool = strongest.score ? allQuotes.filter(item => item.mood === strongest.mood) : allQuotes;
+			const strongest = strongestMood(query);
+			const selectedMood = strongest.score ? strongest.mood : 'all';
+			const fallbackMood = moodFallbacks[selectedMood];
+			const exactPool = selectedMood === 'all' ? allQuotes : allQuotes.filter(item => item.mood === selectedMood);
+			const pool = selectedMood === 'all' || exactPool.length ? exactPool : allQuotes.filter(item => item.mood === fallbackMood);
 			const chosenPool = query ? pool.filter(item => !item.text.toLowerCase().includes(quote.textContent.toLowerCase())) : pool;
 			currentIndex = Math.floor(Math.random() * chosenPool.length);
 			const chosenQuote = chosenPool.length ? chosenPool[currentIndex] : pool[0];
-			showQuote(chosenQuote, allQuotes.indexOf(chosenQuote));
+			showQuote(chosenQuote, allQuotes.indexOf(chosenQuote), selectedMood === 'all' ? chosenQuote.mood : selectedMood);
 		}
 		document.querySelector('#find').addEventListener('click', chooseQuote);
 		document.querySelector('#situation').addEventListener('keydown', event => { if (event.key === 'Enter') chooseQuote(); });
@@ -367,11 +425,10 @@
 				const archive = works.flatMap(work => work.lines
 					.map(line => ({ text: line.replace(/\s+/g, ' ').trim(), source: work.title }))
 					.filter(item => item.text.length >= 24 && item.text.length <= 180 && !existing.has(item.text)))
-					.slice(0, 400)
+					.slice(0, 500)
 					.map(item => {
-						const text = item.text.toLowerCase();
-						const mood = promptSignals.love.some(signal => text.includes(signal)) ? 'love' : promptSignals.courage.some(signal => text.includes(signal)) ? 'courage' : promptSignals.chaos.some(signal => text.includes(signal)) ? 'chaos' : 'wisdom';
-						return { mood, text: item.text, source: item.source };
+						const moodMatch = strongestMood(item.text.toLowerCase());
+						return { mood: moodMatch.score ? moodMatch.mood : 'wisdom', text: item.text, source: item.source };
 					});
 				allQuotes = [...allQuotes, ...archive];
 				document.querySelector('#quote-number').textContent = `Quote 01 / ${allQuotes.length}`;
